@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-white fw-bold mb-4">📦 Manage Purchases</h2>
+
+<!-- Add Purchase Form -->
+<div class="card p-4 mb-4 shadow-lg">
+  <form method="POST" action="{{ url_for('add_purchase') }}" class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label text-dark fw-semibold">Supplier</label>
+      <select name="sid" class="form-select" required>
+        <option value="">Select Supplier</option>
+        {% for s in suppliers %}
+          <option value="{{ s.sid }}">{{ s.sname }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label text-dark fw-semibold">Medicine</label>
+      <select name="mid" class="form-select" required>
+        <option value="">Select Medicine</option>
+        {% for m in medicines %}
+          <option value="{{ m.mid }}">{{ m.mname }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label text-dark fw-semibold">Date</label>
+      <input type="date" name="purchase_date" class="form-control" required>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label text-dark fw-semibold">Quantity</label>
+      <input type="number" name="quantity" class="form-control" min="1" required>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label text-dark fw-semibold">Cost/Unit (₹)</label>
+      <input type="number" step="0.01" name="cost_per_unit" class="form-control" required>
+    </div>
+
+    <div class="col-12 text-end mt-3">
+      <button class="btn btn-success px-4">Add Purchase</button>
+    </div>
+  </form>
+</div>
+
+<!-- Purchase Table -->
+<table class="table table-hover table-bordered text-center align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>Purchase ID</th>
+      <th>Supplier</th>
+      <th>Medicine</th>
+      <th>Purchase Date</th>
+      <th>Quantity</th>
+      <th>Cost/Unit (₹)</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for p in purchases %}
+    <tr>
+      <td>{{ p.pid }}</td>
+      <td>{{ p.supplier_name }}</td>
+      <td>{{ p.medicine_name }}</td>
+      <td>{{ p.purchase_date }}</td>
+      <td>{{ p.quantity }}</td>
+      <td>₹{{ p.cost_per_unit }}</td>
+      <td>
+        <a href="{{ url_for('delete_purchase', pid=p.pid) }}" class="btn btn-sm btn-danger">
+          <i class="bi bi-trash"></i> Delete
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+  <h2 class="text-center text-white fw-bold mb-4">👥 Manage Customers</h2>
+
+  <!-- ✅ Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show text-center">
+          {{ message }}
+          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  {% endwith %}
+
+  <!-- ➕ Add Customer Button -->
+  <div class="text-end mb-3">
+    <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#addCustomerModal">
+      <i class="bi bi-person-plus"></i> Add Customer
+    </button>
+  </div>
+
+  <!-- 📋 Customer Table -->
+  <div class="table-responsive mb-5">
+    <table class="table table-hover table-bordered align-middle text-center bg-white shadow">
+      <thead class="table-primary">
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Phone</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+        <tr>
+          <td>{{ c.cid }}</td>
+          <td>{{ c.cname }}</td>
+          <td>{{ c.caddress }}</td>
+          <td>{{ c.cphone }}</td>
+          <td>
+            <!-- ✏️ Edit -->
+            <button class="btn btn-warning btn-sm" data-bs-toggle="modal" data-bs-target="#editCustomerModal{{ c.cid }}">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+
+            <!-- 🗑️ Delete -->
+            <a href="{{ url_for('delete_customer', cid=c.cid) }}" class="btn btn-danger btn-sm"
+               onclick="return confirm('Are you sure you want to delete this customer?');">
+              <i class="bi bi-trash"></i>
+            </a>
+          </td>
+        </tr>
+
+        <!-- ✏️ Edit Customer Modal -->
+        <div class="modal fade" id="editCustomerModal{{ c.cid }}" tabindex="-1">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <form method="POST" action="{{ url_for('update_customer', cid=c.cid) }}">
+                <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title">Edit Customer</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                  <div class="mb-3">
+                    <label class="form-label">Customer Name</label>
+                    <input type="text" name="cname" value="{{ c.cname }}" class="form-control" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Address</label>
+                    <input type="text" name="caddress" value="{{ c.caddress }}" class="form-control" required>
+                  </div>
+                  <div class="mb-3">
+                    <label class="form-label">Phone</label>
+                    <input type="text" name="cphone" value="{{ c.cphone }}" class="form-control" required>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                  <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ➕ Add Customer Modal -->
+  <div class="modal fade" id="addCustomerModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form method="POST" action="{{ url_for('add_customer') }}">
+          <div class="modal-header bg-success text-white">
+            <h5 class="modal-title">Add New Customer</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Customer Name</label>
+              <input type="text" name="cname" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Address</label>
+              <input type="text" name="caddress" class="form-control" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Phone</label>
+              <input type="text" name="cphone" class="form-control" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            <button type="submit" class="btn btn-success">Add Customer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🧾 Customer Audit Log -->
+  <div class="card mt-5 shadow" style="border-radius: 15px; background: rgba(255,255,255,0.3); backdrop-filter: blur(10px);">
+    <div class="card-header bg-dark text-white">
+      <h5 class="mb-0"><i class="bi bi-clock-history"></i> Customer Activity Log</h5>
+    </div>
+    <div class="card-body">
+      {% if audit and audit|length > 0 %}
+      <div class="table-responsive">
+        <table class="table table-striped align-middle text-center">
+          <thead class="table-secondary">
+            <tr>
+              <th>Audit ID</th>
+              <th>Customer ID</th>
+              <th>Name</th>
+              <th>Action</th>
+              <th>Action Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for a in audit %}
+            <tr>
+              <td>{{ a.audit_id }}</td>
+              <td>{{ a.customer_id }}</td>
+              <td>{{ a.customer_name }}</td>
+              <td><span class="badge bg-info">{{ a.action }}</span></td>
+              <td>{{ a.action_time }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="text-center text-muted">No recent customer activities logged.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

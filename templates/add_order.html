@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-white fw-bold mb-4">➕ Add New Order</h2>
+
+<form method="POST" action="{{ url_for('add_order') }}" class="bg-light p-4 rounded shadow-lg">
+  <div class="mb-3">
+    <label for="order_date" class="form-label">Order Date</label>
+    <input type="date" name="order_date" class="form-control" required>
+  </div>
+
+  <h5 class="mt-4 mb-2">🧬 Select Medicines</h5>
+  <div id="medicine-section">
+    <div class="medicine-row d-flex mb-2">
+      <select name="medicine_ids" class="form-select me-2" required>
+        {% for med in medicines %}
+        <option value="{{ med.mid }}">{{ med.mname }} (₹{{ med.price }})</option>
+        {% endfor %}
+      </select>
+      <input type="number" name="quantities" class="form-control me-2" placeholder="Quantity" min="1" required>
+    </div>
+  </div>
+
+  <div class="text-end">
+    <button type="button" class="btn btn-secondary btn-sm" id="addMore">➕ Add More Medicine</button>
+  </div>
+
+  <div class="text-center mt-4">
+    <button type="submit" class="btn btn-success">💾 Save Order</button>
+    <a href="{{ url_for('orders') }}" class="btn btn-outline-light ms-2">⬅ Back</a>
+  </div>
+</form>
+
+<script>
+document.getElementById('addMore').addEventListener('click', function() {
+  const section = document.getElementById('medicine-section');
+  const newRow = section.children[0].cloneNode(true);
+  newRow.querySelectorAll('input').forEach(i => i.value = '');
+  section.appendChild(newRow);
+});
+</script>
+{% endblock %}

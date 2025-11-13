@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center mb-5 text-white fw-bold">✨ Dashboard Overview</h2>
+
+<div class="row g-4 text-center">
+
+  <!-- Medicines -->
+  <div class="col-md-3">
+    <div class="card p-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png" width="60" class="mx-auto">
+      <h5 class="mt-3">Total Medicines</h5>
+      <h3 class="fw-bold text-success">{{ total_medicines }}</h3>
+    </div>
+  </div>
+
+  <!-- Customers -->
+  <div class="col-md-3">
+    <div class="card p-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/1077/1077063.png" width="60" class="mx-auto">
+      <h5 class="mt-3">Customers</h5>
+      <h3 class="fw-bold text-warning">{{ total_customers }}</h3>
+    </div>
+  </div>
+
+  <!-- Suppliers -->
+  <div class="col-md-3">
+    <div class="card p-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/4185/4185509.png" width="60" class="mx-auto">
+      <h5 class="mt-3">Suppliers</h5>
+      <h3 class="fw-bold text-primary">{{ total_suppliers }}</h3>
+    </div>
+  </div>
+
+
+
+<!-- Orders Row -->
+<div class="row g-4 text-center mt-4">
+  <div class="col-md-3 mx-auto">
+    <div class="card p-4">
+      <img src="https://cdn-icons-png.flaticon.com/512/3737/3737151.png" width="60" class="mx-auto">
+      <h5 class="mt-3">Total Orders</h5>
+      <h3 class="fw-bold text-info">{{ total_orders }}</h3>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

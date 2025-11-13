@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-white fw-bold mb-4">🚚 Manage Deliveries</h2>
+
+<!-- Add Delivery Form -->
+<div class="card p-4 mb-4 shadow-lg">
+  <form method="POST" action="{{ url_for('add_delivery') }}" class="row g-3">
+    <div class="col-md-3">
+      <label class="form-label text-dark fw-semibold">Delivery Person</label>
+      <select name="did" class="form-select" required>
+        <option value="">Select Delivery Person</option>
+        {% for dp in deliverypersons %}
+          <option value="{{ dp.did }}">{{ dp.dname }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    
+
+    <div class="col-md-2">
+      <label class="form-label text-dark fw-semibold">Date</label>
+      <input type="date" name="delivery_date" class="form-control" required>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label text-dark fw-semibold">Status</label>
+      <select name="status" class="form-select" required>
+        <option>Delivered</option>
+        <option>Out for Delivery</option>
+        <option>Pending</option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <label class="form-label text-dark fw-semibold">Remarks</label>
+      <input type="text" name="remarks" class="form-control" placeholder="Handled carefully">
+    </div>
+
+    <div class="col-12 text-end mt-3">
+      <button class="btn btn-success px-4">Add Delivery</button>
+    </div>
+  </form>
+</div>
+
+<!-- Deliveries Table -->
+<table class="table table-hover table-bordered text-center align-middle">
+  <thead class="table-light">
+    <tr>
+      <th>Order ID</th>
+      <th>Delivery Person</th>
+      <th>Delivery Date</th>
+      <th>Status</th>
+      <th>Remarks</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for d in deliveries %}
+    <tr>
+      <td>{{ d.delivery_id }}</td>
+      <td>{{ d.delivery_person }}</td>
+      <td>{{ d.delivery_date }}</td>
+      <td>
+        {% if d.status == 'Delivered' %}
+          <span class="badge bg-success">{{ d.status }}</span>
+        {% elif d.status == 'Pending' %}
+          <span class="badge bg-warning text-dark">{{ d.status }}</span>
+        {% else %}
+          <span class="badge bg-info text-dark">{{ d.status }}</span>
+        {% endif %}
+      </td>
+      <td>{{ d.remarks }}</td>
+      <td>
+        <a href="{{ url_for('delete_delivery', delivery_id=d.delivery_id) }}" class="btn btn-sm btn-danger">
+
+          <i class="bi bi-trash"></i> Delete
+        </a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

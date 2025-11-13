@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="text-center text-white fw-bold mb-4">📉 Low Stock Medicines</h2>
+
+{% if data %}
+<div class="row g-4">
+  {% for m in data %}
+  <div class="col-md-4">
+    <div class="card text-center p-3 shadow-lg border-0" style="background: rgba(255,255,255,0.4); backdrop-filter: blur(10px); border-radius: 20px;">
+      <img src="https://cdn-icons-png.flaticon.com/512/2966/2966489.png" width="60" class="mx-auto mb-3" style="animation: float 3s ease-in-out infinite;">
+      <h5 class="fw-bold text-dark">{{ m.mname }}</h5>
+      <p class="mb-1"><strong>Category:</strong> {{ m.category }}</p>
+      <p class="mb-1 text-danger"><strong>Stock:</strong> {{ m.stock }}</p>
+      <p class="text-success"><strong>Price:</strong> ₹{{ m.price }}</p>
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center text-white mt-5">
+  <h5>✅ All medicines are sufficiently stocked!</h5>
+</div>
+{% endif %}
+
+<style>
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
+.card:hover {
+  transform: translateY(-5px) scale(1.03);
+  transition: all 0.3s ease-in-out;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.25);
+}
+</style>
+
+{% endblock %}

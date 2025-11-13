@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+
+<h2 class="text-center text-white fw-bold mb-4">🧾 Customer Order Details</h2>
+
+{% if data %}
+<div class="table-responsive">
+  <table class="table table-hover table-bordered table-striped bg-light rounded shadow-lg">
+    <thead class="table-dark text-center">
+      <tr>
+        <th>Order Detail ID</th>
+        <th>Customer</th>
+        <th>Invoice</th>
+        <th>Medicine</th>
+        <th>Quantity</th>
+        <th>Price/Unit (₹)</th>
+        <th>Discount (%)</th>
+        <th>Payment Mode</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in data %}
+      <tr class="text-center">
+        <td>{{ row.cod_id }}</td>
+        <td>{{ row.customer_name or "—" }}</td>
+        <td>{{ row.invoice_no or "—" }}</td>
+        <td>{{ row.medicine_name or "—" }}</td>
+        <td>{{ row.quantity }}</td>
+        <td>{{ row.price_per_unit }}</td>
+        <td>{{ row.discount }}</td>
+        <td>{{ row.payment_mode }}</td>
+        <td>{{ row.order_status }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% else %}
+<div class="text-center text-white mt-5">
+  <h5>🚫 No Customer Order Details Available</h5>
+</div>
+{% endif %}
+
+{% endblock %}
